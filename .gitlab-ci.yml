@@ -1,0 +1,18 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - npm run build
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+    - if: CI_MERGE_REQUEST_ID
+
+deploy:
+    stage: deploy
+    script:
+      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY npm run deploy
+    rules: 
+      - if: $CI_COMMIT_BRANCH == 'master'
