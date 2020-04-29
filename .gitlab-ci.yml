@@ -20,7 +20,6 @@ deploy:
  stage: deploy
  script:
   - pip install awscli
-  - npm install
-  - aws s3 sync ./dist s3://www.iamvish.me
+  - aws s3 sync ./public s3://www.iamvish.me
  only: 
   - master
