@@ -1,18 +1,44 @@
 stages:
  - build
  - deploy
+image: nikolaik/python-nodejs:latest
+
+# This folder is cached between builds
+# http://docs.gitlab.com/ce/ci/yaml/README.html#cache
+cache:
+  paths:
+    - node_modules/
+    # Enables git-lab CI caching. Both .cache and public must be cached, otherwise builds will fail.
+    - .cache/
+    - public/
+
+pages:
+  script:
+    - npm install
+    - ./node_modules/.bin/gatsby build --prefix-paths
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
+
 
 build:
+ image: node:latest 
  stage: build
  script:
-  - npm run build
+  npm run build
  rules: 
   - if: '$CI_COMMIT_BRANCH == "master"'
   - if: '$CI_MERGE_REQUEST_ID'
 
 deploy:
  stage: deploy
+ image: python:latest
+ variables:
+  S3_BUCKET_NAME: "www.iamvish.me"
  script:
+  - pip install awscli
   - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY npm run deploy
- rules: 
-  - if: '$CI_COMMIT_BRANCH == "master"'
+ only: 
+  - master
