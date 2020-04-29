@@ -6,7 +6,6 @@ image: nikolaik/python-nodejs:latest
 
 pages:
   script:
-    - apt-get install -y build-essential
     - yarn install
     - ./node_modules/.bin/gatsby build --prefix-paths
     - npm run build
