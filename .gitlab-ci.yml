@@ -1,6 +1,4 @@
-stages:
- - build
- - deploy
+# This file is a template, and might need editing before it works on your project.
 image: nikolaik/python-nodejs:latest
 
 # This folder is cached between builds
@@ -8,23 +6,18 @@ image: nikolaik/python-nodejs:latest
 cache:
   paths:
     - node_modules/
-    # Enables git-lab CI caching. Both .cache and public must be cached, otherwise builds will fail.
-    - .cache/
-    - public/
 
 pages:
   script:
-    - npm install
+    - yarn install
     - ./node_modules/.bin/gatsby build --prefix-paths
   artifacts:
     paths:
       - public
   only:
     - master
-
-
+    
 build:
- image: node:latest 
  stage: build
  script:
   npm run build
@@ -34,7 +27,6 @@ build:
 
 deploy:
  stage: deploy
- image: python:latest
  variables:
   S3_BUCKET_NAME: "www.iamvish.me"
  script:
