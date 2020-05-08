@@ -11,10 +11,7 @@ pages:
     - npm run build
   artifacts:
     paths:
-      - public
-  only:
-    - master
-    
+      - public    
 deploy:
  stage: deploy
  script:
