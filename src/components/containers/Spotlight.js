@@ -17,33 +17,42 @@ const LanderContainer = styled.div`
         position: absolute;
         width: 100%;
         height:100%;
+        opacity:1
     }
+    .focus:hover{
+        
+    }
+    
     `
+
 
 const ActiveContext = React.createContext(true);
 
 
 export const SpotlightContainer = ({ children }) => {
     const [active, setActive] = useState(true);
+    let circleSize = 30;
     const killSpotlight = () => {
         setActive(false);
     }
     return (
         <ActiveContext.Provider value={active}>
-            <StyledContainer action={killSpotlight}>
-                {children}
+            <StyledContainer>
+                <SpotlightLander killSpotlight={killSpotlight} circleSize={circleSize} />
             </StyledContainer>
         </ActiveContext.Provider>
     );
 };
 
 //need to conditionally render the focus and spotlight class? Need to be able to remove the css for it and keep the background image 
-export const SpotlightLander = ({ killSpotlight }) => {
+export const SpotlightLander = ({ killSpotlight, circleSize }) => {
     const active = useContext(ActiveContext);
     const [mousePosition, setMousePosition] = useState({ x: null, y: null });
     const updateMousePosition = ev => {
         setMousePosition({ x: ev.clientX, y: ev.clientY });
     };
+    const { x, y } = mousePosition
+    const focusRef = React.createRef(null);
 
     useEffect(() => {
         window.addEventListener("mousemove", updateMousePosition);
@@ -51,24 +60,37 @@ export const SpotlightLander = ({ killSpotlight }) => {
         return () => window.removeEventListener("mousemove", updateMousePosition);
     }, []);
 
-    const { x, y } = mousePosition
+    useEffect(() => {
+        if ((x > 570 && x < 690) && (y < 700 && y > 590)) {
+            // if (active) {
+            //     let interval = setInterval(() => {
+            //         focusRef.current.style.background = "radial-gradient(circle at " + x + "px " + y + "px, transparent, #000 " + circleSize + "%)";
+            //         circleSize = circleSize - 5;
+            //         console.log("circle Size: " + circleSize);
+            //         if (circleSize == 0) {
+            //             clearInterval(interval);
+            //         }
+            //     }, 500)
+            // }
+
+            killSpotlight();
+
+        }
+
+    }, [x, y, circleSize])
+
     console.log("x: " + x + " y: " + y)
-    //x= 630 y = 656
-    //y low = 550
-    //y high = 715
-    //x l= 615 h=760
-    if ((x > 615 && x < 760) && (y < 714 && y > 550)) {
-        console.log("killing spotlight");
-        //killSpotlight();
-    }
     const style = {
-        background: "radial-gradient(circle at " + x + "px " + y + "px, transparent, #000 30%)"
+        background: "radial-gradient(circle at " + x + "px " + y + "px, transparent, #000 " + circleSize + "%)",
+        transition: "background transition"
     }
     return (
         <LanderContainer>
             {active &&
-                <div className="focus" style={style}></div>
+                <div className="focus" style={style} ref={focusRef}>
+                </div>
             }
+
         </LanderContainer>
     );
 };
