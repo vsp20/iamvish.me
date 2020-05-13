@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import img from "../../images/test_picture.jpg";
 import classNames from 'classnames';
 
-
 const Container = styled.div`
 margin:0;
 padding:0;
