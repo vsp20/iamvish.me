@@ -20,7 +20,7 @@ const Container = styled.div`
     
     ::-webkit-scrollbar{
         width:0;
-            background: transparent; /* make scrollbar transparent */
+        background: transparent; /* make scrollbar transparent */
 
     }
     .scrollPath{
@@ -39,6 +39,7 @@ const Container = styled.div`
         width: 10px;   
         background: linear-gradient(to top, #008aff, #00ffe7);
         animation: ${frames} 5s linear infinite;
+        z-index:1000;
 
     }
     .progressBar:before{
@@ -65,7 +66,7 @@ const Container = styled.div`
 
 
 
-const ScrollBar = ({ children }) => {
+const ScrollBar = () => {
     let style = {}
     const [height, setHeight] = useState(0);
 
@@ -97,7 +98,6 @@ const ScrollBar = ({ children }) => {
         <Container>
             <div className="progressBar" style={{ height: height + "%" }} />
             <div className="scrollPath" />
-            {children}
         </Container>
     );
 };
