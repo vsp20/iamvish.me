@@ -67,7 +67,6 @@ const Container = styled.div`
 
 
 const ScrollBar = () => {
-    let style = {}
     const [height, setHeight] = useState(0);
 
     useLayoutEffect(() => {
@@ -91,6 +90,10 @@ const ScrollBar = () => {
             console.log(height);
         }
         window.addEventListener("scroll", onScroll);
+        return () => {
+            window.removeEventListener("scroll", onscroll);
+        }
+
     }, [height]
 
     )
